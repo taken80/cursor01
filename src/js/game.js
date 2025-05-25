@@ -217,8 +217,21 @@ function drawGame() {
     }
     
     // 繪製蛇
-    ctx.fillStyle = '#4CAF50';
+    const snakeLength = gameState.snake.length;
+    const headColor = '#FFD700'; // Golden Yellow
+    const bodyColor = '#FFD700'; // Golden Yellow
+    const tailColor = '#DAA520'; // GoldenRod (darker yellow for tail)
+    const eyeColor = '#000'; // Black
+
     gameState.snake.forEach((segment, index) => {
+        if (index === 0) { // Head
+            ctx.fillStyle = headColor;
+        } else if (index === snakeLength - 1 && snakeLength > 1) { // Tail (only if snake has more than 1 segment)
+            ctx.fillStyle = tailColor;
+        } else { // Body
+            ctx.fillStyle = bodyColor;
+        }
+        
         ctx.fillRect(
             segment.x * cellSize,
             segment.y * cellSize,
@@ -228,7 +241,7 @@ function drawGame() {
         
         // 繪製蛇眼睛（只在蛇頭上）
         if (index === 0) {
-            ctx.fillStyle = '#000';
+            ctx.fillStyle = eyeColor;
             const eyeSize = cellSize / 6;
             const eyeOffset = cellSize / 4;
             
@@ -251,7 +264,7 @@ function drawGame() {
                     ctx.fillRect(segment.x * cellSize + cellSize - eyeOffset - eyeSize, segment.y * cellSize + cellSize - eyeOffset, eyeSize, eyeSize);
                     break;
             }
-            ctx.fillStyle = '#4CAF50';
+            // No need to reset fillStyle to snake color here, as the next loop iteration or drawing step will set its own color.
         }
     });
     
